@@ -42,7 +42,7 @@ module Travails
   end
 
   class Knight
-    attr_accessor :board, :position, :moves
+    attr_accessor :board, :position
 
     MOVES = [ [1,2],
               [1,-2],
@@ -59,8 +59,6 @@ module Travails
       @moves = next_moves(position)
     end
 
-
-
     def knight_moves start=@position, finish
       #find the shorted path from start to finish.
       #first check to see if you're there already
@@ -76,7 +74,8 @@ module Travails
       until queue.empty?
         node = queue.pop
         if node.position == finish
-          return Move.unroll_path(node)
+          print_path(Move.unroll_path(node))
+          return true
         end
         next_moves(node).each{|node|
           queue.unshift(node)
@@ -98,6 +97,19 @@ module Travails
     def legal_move? move
       return board.include? move.position
     end
+
+    def print_path moves
+      if moves.length == 1
+        puts "You made it in 1 move! Here's your path: "
+      else
+        puts "You made it in #{moves.length} moves! Here's your path:"
+      end
+      moves.each{|move|
+        print move
+        print "\n"
+      }
+    end
+
 
   end
 
@@ -124,4 +136,7 @@ module Travails
       return @squares.sample
     end
   end
+  board = Board.new(8)
+  knight = Knight.new(board)
+  knight.knight_moves [1,1],[5,5]
 end
